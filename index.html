@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Musical Calculator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #7f0606, #000000);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Calculator Styles */
+        .calculator {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+            width: 320px;
+        }
+        #display {
+            width: 100%;
+            height: 50px;
+            background-color: #fff;
+            font-size: 24px;
+            text-align: right;
+            padding: 5px;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 5px;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        button {
+            padding: 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #e0e0e0;
+        }
+        button.operator { background-color: #f39c12; color: #fff; }
+        button.equal { background-color: #27ae60; color: #fff; grid-column: span 2;}
+
+        /* Lyric View Styles */
+        #lyric-container {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            width: 320px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+        }
+        .lyrics {
+            font-size: 20px;
+            color: #333;
+            margin-top: 15px;
+            line-height: 1.6;
+        }
+        .animate-lyrics {
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="calculator" id="calc-ui">
+        <input type="text" id="display" readonly>
+        <div class="buttons">
+            <button onclick="clearDisplay()">C</button>
+            <button class="operator" onclick="appendValue('/')">/</button>
+            <button class="operator" onclick="appendValue('%')">%</button>
+            <button class="operator" onclick="appendValue('÷')">÷</button>
+            <button onclick="appendValue('7')">7</button>
+            <button onclick="appendValue('8')">8</button>
+            <button onclick="appendValue('9')">9</button>
+            <button class="operator" onclick="appendValue('-')">-</button>
+            <button onclick="appendValue('4')">4</button>
+            <button onclick="appendValue('5')">5</button>
+            <button onclick="appendValue('6')">6</button>
+            <button class="operator" onclick="appendValue('x')">x</button>
+            <button onclick="appendValue('1')">1</button>
+            <button onclick="appendValue('2')">2</button>
+            <button onclick="appendValue('3')">3</button>
+            <button class="operator" onclick="appendValue('+')">+</button>
+            <button onclick="appendValue('0')">0</button>
+            <button onclick="appendValue('.')">.</button>
+            <button class="equal" onclick="calculate()">=</button>
+        </div>
+    </div>
+
+    <div id="lyric-container">
+        <h2>Magnolia</h2>
+        <div class="lyrics animate-lyrics" id="lyrics-text">
+            (ahahah...)<br>
+            Wrecking balls and million stones
+            Will never take away
+            My strongest will to say
+            The words you long to hear
+            The city's falling down and down
+            This very old long way
+            I don′t need to say more
+            The words you long to hear<br>
+            Wrecking balls and million stones
+            Will never take away
+            My strongest will to say
+            The words you long to hear
+            The city's falling down and down
+            This very old long way
+            I don′t need to say more
+            The words you long to hear
+            I don't need to say more, just no more
+            The words you long to hear
+            
+        </div>
+    </div>
+
+    <!-- Audio Tag for the song -->
+    <!-- Replace 'your-song.mp3' with the direct URL or file path of your music -->
+    <audio id="background-music" src="ScreenRecording_07-13-2026 20-46-23_1.mp3"></audio>
+
+    <script>
+        const display = document.getElementById('display');
+        const calcUI = document.getElementById('calc-ui');
+        const lyricContainer = document.getElementById('lyric-container');
+        const backgroundMusic = document.getElementById('background-music');
+
+        function appendValue(val) {
+            display.value += val;
+        }
+
+        function clearDisplay() {
+            display.value = '';
+        }
+
+        function calculate() {
+            try {
+                // Evaluate the math equation
+                let result = eval(display.value);
+                display.value = result;
+
+                // TRIGGER: Play the music and transform the screen
+                playMusicAndShowLyrics();
+            } catch (error) {
+                display.value = 'Error';
+            }
+        }
+
+        function playMusicAndShowLyrics() {
+            // Hide the calculator UI
+            calcUI.style.display = 'none';
+
+            // Show the lyric container
+            lyricContainer.style.display = 'block';
+
+            // Play the music
+            backgroundMusic.play().catch(error => {
+                console.log("Audio play prevented until user interaction.", error);
+            });
+        }
+    </script>
+</body>
+</html>
